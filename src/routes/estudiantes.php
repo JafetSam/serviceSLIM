@@ -19,6 +19,7 @@ $app = new \Slim\App;
 
 
 //Obtener todos los estudiantes
+/*
 $app->get('/estudiantes', function(Request $request, Response $response){
     $consulta = "SELECT * FROM estudiantes";
     try{
@@ -38,7 +39,7 @@ $app->get('/estudiantes', function(Request $request, Response $response){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
-
+*/
 
 
 
@@ -48,9 +49,9 @@ $app->get('/estudiante/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
 
 
-     $consulta = "SELECT p.Nombre_Persona as nombre, p.Telefono_Persona as tel,e.Carne_estudiante as carne,p.Direccion_Persona,p.Email_Persona 
-        from personas as p 
-        inner join estudiantes as e 
+     $consulta = "SELECT p.Nombre_Persona as nombre, p.Telefono_Persona as tel,e.Carne_estudiante as carne,p.Direccion_Persona,p.Email_Persona
+        from personas as p
+        inner join estudiantes as e
         on (p.Id_Persona=e.Id_Persona) WHERE e.Id_Estudiante='$id'";
 
     try{
@@ -65,7 +66,7 @@ $app->get('/estudiante/{id}', function(Request $request, Response $response){
 
         //Exportar y mostrar en formato JSON
         echo json_encode($estudiante);
-        
+
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -103,9 +104,9 @@ $app->get('/validacionEstudiante/{carne}', function(Request $request, Response $
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($avisos); 
-            }     
+            {
+               echo json_encode($avisos);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -124,7 +125,7 @@ $app->get('/casos/{id_estudiante}', function(Request $request, Response $respons
 
 
     $consulta=("SELECT No_Caso as Caso,tipo as Tipo,Nombre_Demandante as Demandante, Nombre_Demandado as Demandado,Tribunal
-        FROM `casos` as c 
+        FROM `casos` as c
         inner join `demandantes` AS d1 ON (d1.id_Demandante=c.id_demandante)
         inner join `tipocaso` AS tip ON(tip.id_tipo=c.id_Tipo)
         inner join `tribunales` AS trib On(trib.id_tribunal=c.id_tribunal)
@@ -146,9 +147,9 @@ $app->get('/casos/{id_estudiante}', function(Request $request, Response $respons
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -170,12 +171,12 @@ $app->get('/notificacionesEstudiante/{id_estudiante}', function(Request $request
 
 
     $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso,a.vista as Vista
-        from aviso_notificacion as a 
-        inner join casos as c on (a.id_caso=c.id_caso) 
-        inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) 
+        from aviso_notificacion as a
+        inner join casos as c on (a.id_caso=c.id_caso)
+        inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo)
         inner join demandantes as d on a.id_demandante=d.id_demandante
-        inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) 
-        inner join personas as p on (e.id_persona=p.id_persona) 
+        inner join estudiantes as e on (a.id_estudiante=e.id_estudiante)
+        inner join personas as p on (e.id_persona=p.id_persona)
         WHERE e.id_estudiante='$id_estudiante' ORDER BY fecha_visita DESC");
 
 
@@ -194,9 +195,9 @@ $app->get('/notificacionesEstudiante/{id_estudiante}', function(Request $request
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -213,10 +214,10 @@ $app->get('/notificacionesVistasEstudiante/{id_estudiante}', function(Request $r
     $id_estudiante = $request->getAttribute('id_estudiante');
 
 
-    $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso from aviso_notificacion as a 
-     inner join casos as c on (a.id_caso=c.id_caso) inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) 
-     inner join demandantes as d on a.id_demandante=d.id_demandante inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) 
-     inner join personas as p on (e.id_persona=p.id_persona) 
+    $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso from aviso_notificacion as a
+     inner join casos as c on (a.id_caso=c.id_caso) inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo)
+     inner join demandantes as d on a.id_demandante=d.id_demandante inner join estudiantes as e on (a.id_estudiante=e.id_estudiante)
+     inner join personas as p on (e.id_persona=p.id_persona)
        WHERE e.id_estudiante='$id_estudiante' and a.vista=1 ORDER BY fecha_visita DESC");
 
 
@@ -235,9 +236,9 @@ $app->get('/notificacionesVistasEstudiante/{id_estudiante}', function(Request $r
                 echo json_encode("El estudiante no tiene alguna notificacion Vista");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -253,8 +254,8 @@ $app->get('/notificacionesNoVistasEstudiante/{id_estudiante}', function(Request 
     $id_estudiante = $request->getAttribute('id_estudiante');
 
 
-    $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso  
-        from aviso_notificacion as a inner join casos as c on (a.id_caso=c.id_caso) inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) inner join demandantes as d on a.id_demandante=d.id_demandante inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) inner join personas as p on (e.id_persona=p.id_persona) 
+    $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso
+        from aviso_notificacion as a inner join casos as c on (a.id_caso=c.id_caso) inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) inner join demandantes as d on a.id_demandante=d.id_demandante inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) inner join personas as p on (e.id_persona=p.id_persona)
          WHERE e.id_estudiante='$id_estudiante' and a.vista=0 ORDER BY fecha_visita DESC");
 
 
@@ -273,9 +274,9 @@ $app->get('/notificacionesNoVistasEstudiante/{id_estudiante}', function(Request 
                 echo json_encode("El estudiante no tiene ninguna notificacion no Vista");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -294,15 +295,15 @@ $app->get('/detalleNotificacion/{id}', function(Request $request, Response $resp
 
     $id = $request->getAttribute('id');
 
- 
+
 $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,Time(fecha_visita) as Hora,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante,d.nombre_demandante as Demandante,
     ases.nombre_persona as Asesor,descripcion as Descripcion, t.tipo as Tipo_Caso
 
-    from aviso_notificacion as a 
-    inner join casos as c on (a.id_caso=c.id_caso) 
-    inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) 
-    inner join demandantes as d on a.id_demandante=d.id_demandante 
-    inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) 
+    from aviso_notificacion as a
+    inner join casos as c on (a.id_caso=c.id_caso)
+    inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo)
+    inner join demandantes as d on a.id_demandante=d.id_demandante
+    inner join estudiantes as e on (a.id_estudiante=e.id_estudiante)
     inner join personas as p on (e.id_persona=p.id_persona)
     inner join personas as ases on (ases.id_persona=a.id_persona) WHERE  id_aviso='$id'");
 
@@ -319,7 +320,7 @@ $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,Time(fecha_visita) as H
 
         //Exportar y mostrar en formato JSON
         echo json_encode($estudiante);
-        
+
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -349,7 +350,7 @@ inner join `personas` as estu on(estu.Id_Persona=c.Id_Estudiante)
 inner join `tipoasunto`as asunto on(asunto.Id_TipoAsunto=c.Id_TipoAsunto) WHERE No_Caso='$id'");
 
 
-    try{    
+    try{
         // Instanciar la base de datos
         $db = new db();
 
@@ -361,7 +362,7 @@ inner join `tipoasunto`as asunto on(asunto.Id_TipoAsunto=c.Id_TipoAsunto) WHERE 
 
         //Exportar y mostrar en formato JSON
         echo json_encode($estudiante);
-        
+
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -505,6 +506,7 @@ $app->post('/cambiarNotificacionVista/{id}', function(Request $request, Response
 
 
 //Obtener todos los asesores
+/*
 $app->get('/asesores', function(Request $request, Response $response){
     $consulta = "SELECT * FROM `personas` where role='ROLE_ASESOR'";
     try{
@@ -524,7 +526,7 @@ $app->get('/asesores', function(Request $request, Response $response){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
-
+*/
 
 
 
@@ -548,7 +550,7 @@ $app->get('/asesor/{id}', function(Request $request, Response $response){
 
         //Exportar y mostrar en formato JSON
         echo json_encode($estudiante);
-        
+
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -584,9 +586,9 @@ $app->get('/validacionAsesor/{usuario}', function(Request $request, Response $re
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($avisos); 
-            }     
+            {
+               echo json_encode($avisos);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -605,7 +607,7 @@ $app->get('/listaCasosAsesor/{id_persona}', function(Request $request, Response 
 
 
 $consulta=("SELECT No_Caso as Caso,es.id_estudiante as Id_Estudiante,estu.nombre_persona as Estudiante,es.Carne_estudiante,tipo as Tipo,Nombre_Demandante as Demandante, Nombre_Demandado as Demandado,Tribunal
-        FROM `casos` as c 
+        FROM `casos` as c
         inner join `demandantes` AS d1 ON (d1.id_Demandante=c.id_demandante)
         inner join `tipocaso` AS tip ON(tip.id_tipo=c.id_Tipo)
         inner join `tribunales` AS trib On(trib.id_tribunal=c.id_tribunal)
@@ -630,9 +632,9 @@ $consulta=("SELECT No_Caso as Caso,es.id_estudiante as Id_Estudiante,estu.nombre
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -652,7 +654,7 @@ $app->get('/listaEstudiantesAsesor/{id_persona}', function(Request $request, Res
 
 
 $consulta=("SELECT No_Caso as Caso,estu.Nombre_Persona as Estudiante,es.Id_Estudiante,es.Carne_estudiante as Carne
-        FROM `casos` as c 
+        FROM `casos` as c
         inner join `personas` AS estu on(estu.id_persona=c.id_estudiante)
         inner join `personas` AS ases on(ases.id_persona=c.id_persona)
         inner join `estudiantes` as es on(es.id_estudiante=c.id_estudiante)
@@ -673,9 +675,9 @@ $consulta=("SELECT No_Caso as Caso,estu.Nombre_Persona as Estudiante,es.Id_Estud
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -696,11 +698,11 @@ $app->get('/notificacionesAsesor/{id_persona}', function(Request $request, Respo
 
 
 $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Caso, p.nombre_persona as Estudiante,ases.Nombre_Persona as Asesor, d.nombre_demandante as Demandante, descripcion as Descripcion, t.tipo as Tipo_Caso,a.vista as Vista
-        from aviso_notificacion as a inner join casos as c on (a.id_caso=c.id_caso) 
-        inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo) 
+        from aviso_notificacion as a inner join casos as c on (a.id_caso=c.id_caso)
+        inner join tipocaso as t on (c.Id_Tipo=t.Id_Tipo)
         inner join demandantes as d on a.id_demandante=d.id_demandante
-        inner join estudiantes as e on (a.id_estudiante=e.id_estudiante) 
-        inner join personas as p on (e.id_persona=p.id_persona) 
+        inner join estudiantes as e on (a.id_estudiante=e.id_estudiante)
+        inner join personas as p on (e.id_persona=p.id_persona)
         inner join personas as ases on(ases.Id_Persona=c.Id_Persona)
         WHERE ases.role='ROLE_ASESOR' AND ases.id_persona='$id_asesor'
         ORDER BY fecha_visita DESC");
@@ -721,21 +723,11 @@ $consulta=("SELECT id_aviso, Date(fecha_visita) as Fecha,c.no_caso as Codigo_Cas
                 echo json_encode("Datos incorrectos");
             }
             else
-            { 
-               echo json_encode($estudiante); 
-            }     
+            {
+               echo json_encode($estudiante);
+            }
     }
      catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
-
-
-
-
-
-
-
-
-
-
